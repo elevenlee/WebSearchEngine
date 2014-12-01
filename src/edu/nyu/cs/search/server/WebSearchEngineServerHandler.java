@@ -10,12 +10,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 public class WebSearchEngineServerHandler implements HttpHandler {
+    private static final Logger LOGGER = Logger.getLogger("edu.nyu.cs.search.server.WebSearchEngineServerHandler");
+    
     private static final String GET = "GET";
     private static final String QUERY = "query";
     private static final String CONTENT_TYPE = "Content-Type";
@@ -27,16 +30,15 @@ public class WebSearchEngineServerHandler implements HttpHandler {
             return;
         }
         Headers requestHeaders = exchange.getRequestHeaders();
-        System.out.print("Incoming request: ");
+        LOGGER.info("Incoming request: ");
         for (String key : requestHeaders.keySet()) {
-            System.out.print(key + ":" + requestHeaders.get(key) + "; ");
+            LOGGER.info(key + ":" + requestHeaders.get(key) + "; ");
         }
-        System.out.println();
         
         URI uri = exchange.getRequestURI();
         String parameter = getParameter(QUERY, uri.getRawQuery());
-        System.out.println("URI: " + exchange.getRemoteAddress() + uri);
-        System.out.println("Query Parameter: [" + QUERY + "=" + parameter + "]");
+        LOGGER.info("URI: " + exchange.getRemoteAddress() + uri);
+        LOGGER.info("Query Parameter: [" + QUERY + "=" + parameter + "]");
         
         Headers responseHeaders = exchange.getResponseHeaders();
         responseHeaders.set(CONTENT_TYPE, "text/plain");
