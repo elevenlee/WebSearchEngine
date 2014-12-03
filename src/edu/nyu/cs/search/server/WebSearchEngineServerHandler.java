@@ -16,6 +16,14 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+/**
+ * @author shenli
+ * <p>
+ * The {@code WebSearchEngineServerHandler} based implementation of the {@link com.sun.net.httpserver.HttpHandler}
+ * interface. This implementation represents a simple handler which is invoked to process HTTP exchanges. Each
+ * exchange takes a HTTP query at path {@code localhost:25814/search} through CGI arguments and give the same query
+ * back to users.
+ */
 public class WebSearchEngineServerHandler implements HttpHandler {
     private static final Logger LOGGER = Logger.getLogger("edu.nyu.cs.search.server.WebSearchEngineServerHandler");
     
@@ -24,6 +32,15 @@ public class WebSearchEngineServerHandler implements HttpHandler {
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String ENCODE = "UTF-8";
 
+    /**
+     * Handle the given request and generate an appropriate response which exactly same as request. 
+     * See {@link com.sun.net.httpserver.HttpExchange} for a description of the steps involved in handling 
+     * an exchange.
+     * <p>
+     * @param exchange he exchange containing the request from the client and used to send the response
+     * @throws NullPointerException if exchange is {@code null}
+     * @throws IOException
+     */
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if (!GET.equalsIgnoreCase(exchange.getRequestMethod())) {
@@ -49,6 +66,13 @@ public class WebSearchEngineServerHandler implements HttpHandler {
         responseBody.close();
     }
 
+    /**
+     * Returns the string representation of the request key value in the CGI query.
+     * <p>
+     * @param key the key name of query
+     * @param query the CGI query content
+     * @return the string representation of the request key value in the CGI query
+     */
     private String getParameter(String key, String query) {
         Object value = getQueryMaps(query).get(key);
         if (value == null) {
@@ -61,6 +85,12 @@ public class WebSearchEngineServerHandler implements HttpHandler {
         return value.toString();
     }
     
+    /**
+     * Returns the map containing all keys whose associated correspondent request value in CGI query.
+     * <p>
+     * @param query the CGI query content
+     * @return the map containing all keys whose associated correspondent request value in CGI query
+     */
     private Map<String, Object> getQueryMaps(String query) {
         if (query == null) {
             return Collections.emptyMap();
