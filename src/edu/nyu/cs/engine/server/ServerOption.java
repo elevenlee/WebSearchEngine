@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  * as well as index location which generated during server index mode. Besides, user could provide additional 
  * options in the same server configuration file. Each options must have a key-value map, separated by ":".
  */
-class ServerOption {
+public class ServerOption {
     private static final Logger LOGGER = Logger.getLogger("edu.nyu.cs.engine.server.ServerOption");
     
     private final String corpusPrefix;
@@ -42,7 +42,7 @@ class ServerOption {
      * <p>
      * @return corpus prefix
      */
-    String getCorpusPrefix() {
+    public String getCorpusPrefix() {
         return corpusPrefix;
     }
 
@@ -51,7 +51,7 @@ class ServerOption {
      * <p>
      * @return index prefix
      */
-    String getIndexPrefix() {
+    public String getIndexPrefix() {
         return indexPrefix;
     }
 
@@ -60,7 +60,7 @@ class ServerOption {
      * <p>
      * @return indexer type
      */
-    String getIndexerType() {
+    public String getIndexerType() {
         return indexerType;
     }
     
@@ -70,7 +70,7 @@ class ServerOption {
      * <p>
      * @param optionsFilePath the server configuration file path
      * @return a newly allocated instance of the {@code ServerOption} object
-     * @throws IOException If an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     static ServerOption newInstance(String optionsFilePath) throws IOException {
         BufferedReader reader = new BufferedReader(

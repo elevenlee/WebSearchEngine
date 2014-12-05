@@ -1,7 +1,14 @@
 package edu.nyu.cs.engine.server;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
+
+import com.sun.net.httpserver.HttpServer;
+
+import edu.nyu.cs.engine.index.SearchIndexer;
+import edu.nyu.cs.engine.index.utils.SearchIndexerFactory;
 
 /**
  * @author shenli
@@ -28,7 +35,7 @@ public class SearchEngineServer {
      * <p>
      * @param args the command line arguments
      * @return true if all command line parameters are valid and false otherwise
-     * @throws IOException If an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     private static boolean parseCommandLine(String[] args) throws IOException {
         for (String arg : args) {
@@ -61,9 +68,11 @@ public class SearchEngineServer {
     /**
      * The main entry that launch search engine server.
      * <p>
-     * @throws IOException If an I/O error occurs
+     * @throws IOException if an I/O error occurs
+     * @throws ClassNotFoundException if the class cannot be located
+     * @throws IllegalArgumentException if server mode does not exist
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         if (args.length < 1) {
             LOGGER.info("Could not find required parameters.");
             LOGGER.info("To start indexing, parameters at least --mode=index --options=<config_file_name>");
@@ -71,13 +80,29 @@ public class SearchEngineServer {
             System.exit(1);
         }
         if (!parseCommandLine(args)) {
+            LOGGER.info("Incorrect parameters detected " + args);
             System.exit(1);
         }
+        SearchIndexer indexer = SearchIndexerFactory.getSearchIndexer(option);
         switch (mode) {
-            case INDEX: // TODO implement indexing process
-            case SERVER: // TODO implement server which takes HTTP search requests
+            case INDEX: 
+                indexer.construct();
+                return;
+            case SERVER: 
+                indexer.load();
+                
+                // Establish the serving environment
+                InetSocketAddress address = new InetSocketAddress(port);
+                HttpServer httpServer = HttpServer.create(address, -1);
+                // TODO add the HTTP handler implementation to deal with the search query requests
+                httpServer.createContext("/", null);
+                httpServer.setExecutor(Executors.newCachedThreadPool());
+                httpServer.start();
+                
+                LOGGER.info("Listening on port: " + port);
+                return;
         }
-        throw new IllegalArgumentException("No such mode: " + mode);
+        throw new IllegalArgumentException("No such search engine mode: " + mode);
     }
 
 }
