@@ -9,6 +9,7 @@ import com.sun.net.httpserver.HttpServer;
 
 import edu.nyu.cs.engine.index.SearchIndexer;
 import edu.nyu.cs.engine.index.utils.SearchIndexerFactory;
+import edu.nyu.cs.engine.query.SearchQueryHandler;
 
 /**
  * @author shenli
@@ -94,8 +95,7 @@ public class SearchEngineServer {
                 // Establish the serving environment
                 InetSocketAddress address = new InetSocketAddress(port);
                 HttpServer httpServer = HttpServer.create(address, -1);
-                // TODO add the HTTP handler implementation to deal with the search query requests
-                httpServer.createContext("/", null);
+                httpServer.createContext("/", new SearchQueryHandler(indexer));
                 httpServer.setExecutor(Executors.newCachedThreadPool());
                 httpServer.start();
                 
