@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import edu.nyu.cs.engine.exception.IllegalSearchEngineConfigurationException;
+
 /**
  * @author shenli
  * <p>
@@ -14,6 +16,9 @@ import java.util.logging.Logger;
  * are defined under {@code conf/engine.conf} file by default. It describes the corpus location, indexer type 
  * as well as index location which generated during server index mode. Besides, user could provide additional 
  * options in the same server configuration file. Each options must have a key-value map, separated by ":".
+ * <p>
+ * {@code ServerOption} could not be created via the constructors in this class. Objects could be obtained 
+ * using the {@link edu.nyu.cs.engine.server.ServerOption#newInstance(java.lang.String)} method in this class.
  */
 public class ServerOption {
     private static final Logger LOGGER = Logger.getLogger("edu.nyu.cs.engine.server.ServerOption");
@@ -71,6 +76,7 @@ public class ServerOption {
      * @param optionsFilePath the server configuration file path
      * @return a newly allocated instance of the {@code ServerOption} object
      * @throws IOException if an I/O error occurs
+     * @throws IllegalSearchEngineConfigurationException if server configuration file miss necessary options
      */
     static ServerOption newInstance(String optionsFilePath) throws IOException {
         BufferedReader reader = new BufferedReader(
@@ -84,7 +90,7 @@ public class ServerOption {
             }
             String[] keyValues = line.split(":", 2);
             if (keyValues.length < 2) {
-                LOGGER.info("Incorrect option key value pattern: " + keyValues);
+                LOGGER.info("Incorrect option key value pattern: " + line);
                 continue;
             }
             options.put(keyValues[0].trim(), keyValues[1].trim());
@@ -93,15 +99,18 @@ public class ServerOption {
         
         String corpusPrefix = options.get("corpus_prefix");
         if (corpusPrefix == null) {
-            LOGGER.info("corpus_prefix option miss in server configuration file " + optionsFilePath);
+            throw new IllegalSearchEngineConfigurationException(
+                    "corpus_prefix option miss in server configuration file " + optionsFilePath);
         }
         String indexPrefix = options.get("index_prefix");
         if (indexPrefix == null) {
-            LOGGER.info("index_prefix option miss in server configuration file " + optionsFilePath);
+            throw new IllegalSearchEngineConfigurationException(
+                    "index_prefix option miss in server configuration file " + optionsFilePath);
         }
         String indexerType = options.get("indexer_type");
         if (indexerType == null) {
-            LOGGER.info("indexer_type option miss in server configuration file " + optionsFilePath);
+            throw new IllegalSearchEngineConfigurationException(
+                    "indexer_type option miss in server configuration file " + optionsFilePath);
         }
         return new ServerOption(corpusPrefix, indexPrefix, indexerType);
     }
@@ -162,7 +171,7 @@ public class ServerOption {
     @Override
     public String toString() {
         return String.format(
-                "corpus_prefix: %s, index_prefix: %s, indexer_type: %s", 
+                "ServerOption={corpus_prefix: %s, index_prefix: %s, indexer_type: %s}", 
                 corpusPrefix, indexPrefix, indexerType);
     }
     
