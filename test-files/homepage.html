@@ -12,15 +12,23 @@
             <fieldset>
                 <legend>Options</legend>
                 <br/>
-                <b>Ranker</b> <input type="radio" name="ranker" value="fullscan" checked>Full-scan
+                <b>Ranker</b>&nbsp;&nbsp;<input type="radio" name="ranker" value="fullscan" checked>Full-scan
                 &nbsp;<input type="radio" name="ranker" value="cosine">Cosine
                 &nbsp;<input type="radio" name="ranker" value="querylikelihood">Query Likelihood
                 &nbsp;<input type="radio" name="ranker" value="phrase">Phrase
                 &nbsp;<input type="radio" name="ranker" value="numberviews">Number Views
                 &nbsp;<input type="radio" name="ranker" value="linear">Linear
                 <p>
-                <b>Format</b> <input type="radio" name="format" value="html" checked>HTML
+                <b>Format</b>&nbsp;&nbsp;<input type="radio" name="format" value="html" checked>HTML
                 &nbsp;&nbsp;<input type="radio" name="format" value="text">Text
+                <p>
+                <b>Results to return</b>&nbsp;
+                <select name="numResults">
+                    <option value="10">10</option>
+                    <option value="10">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
             </fieldset>
         </form>
     </body>
