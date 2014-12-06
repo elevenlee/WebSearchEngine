@@ -1,6 +1,10 @@
 package edu.nyu.cs.engine.index.utils;
 
 import edu.nyu.cs.engine.index.SearchIndexer;
+import edu.nyu.cs.engine.index.impl.FullscanIndexer;
+import edu.nyu.cs.engine.index.impl.InvertedCompressedIndexer;
+import edu.nyu.cs.engine.index.impl.InvertedDocOnlyIndexer;
+import edu.nyu.cs.engine.index.impl.InvertedOccurrenceIndexer;
 import edu.nyu.cs.engine.server.ServerOption;
 
 /**
@@ -29,10 +33,10 @@ public class SearchIndexerFactory {
     public static SearchIndexer getSearchIndexer(ServerOption option) {
         IndexerType indexerType = option.getIndexerType();
         switch (indexerType) {
-            case FULLSCAN:              // TODO create full scan search indexer object
-            case INVERTED_DOCONLY:      // TODO create inverted doc-only search indexer object
-            case INVERTED_OCCURRENCE:   // TODO create inverted occurrence search indexer object
-            case INVERTED_COMPRESSED:   // TODO create inverted compressed search indexer object
+            case FULLSCAN:              return new FullscanIndexer();
+            case INVERTED_DOCONLY:      return new InvertedDocOnlyIndexer();
+            case INVERTED_OCCURRENCE:   return new InvertedOccurrenceIndexer();
+            case INVERTED_COMPRESSED:   return new InvertedCompressedIndexer();
         }
         throw new IllegalArgumentException("No such search indexer type: " + indexerType);
     }
