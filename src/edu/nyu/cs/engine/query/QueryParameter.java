@@ -1,5 +1,7 @@
 package edu.nyu.cs.engine.query;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.logging.Logger;
 
 import edu.nyu.cs.engine.rank.RankerType;
@@ -16,6 +18,8 @@ import edu.nyu.cs.engine.rank.RankerType;
  */
 final class QueryParameter {
     private static final Logger LOGGER = Logger.getLogger("edu.nyu.cs.engine.query.QueryParameter");
+    
+    private static final String ENCODE = "UTF-8";
 
     private final String query;
     private final RankerType rankerType;
@@ -94,14 +98,44 @@ final class QueryParameter {
 
     /**
      * Creates a new instance of the {@code QueryParameter} object so that it records CGI arguments of a 
-     * single HTTP search query request via URL.
+     * single HTTP search query request via URL. If any required parameters not in HTTP requests, this method 
+     * would provide missing parameters to the default values.
      * <p>
      * @param uri the uri contains HTTP request arguments
      * @return a newly allocated instance of the {@code QueryParameter} object
+     * @throws UnsupportedEncodingException if the named encoding is not supported
+     * @throws IllegalArugmentException if number of results less than or equals to 0, or greater than maximum
+     * value of {@link java.lang.Integer}
      */
-    static QueryParameter newInstance(String uri) {
-        // TODO parse uri request
-        return null;
+    static QueryParameter newInstance(String uri) throws UnsupportedEncodingException {
+        final String[] parameters = uri.split("&");
+        // Default values
+        String query = "";
+        RankerType rankerType = RankerType.FULLSCAN;
+        Format format = Format.HTML;
+        int numberOfResults = 10;
+        for (String param : parameters) {
+            final String[] keyValue = param.split("=", 2);
+            if (keyValue.length < 2) {
+                LOGGER.info("Incorrect parameter key value pattern: " + param);
+                continue;
+            }
+            final String key = URLDecoder.decode(keyValue[0], ENCODE).trim();
+            final String value = URLDecoder.decode(keyValue[1], ENCODE).trim();
+            if ("query".equals(key)) {
+                query = value;
+            } else if ("ranker".equals(key)) {
+                rankerType = RankerType.valueOf(value.toUpperCase());
+            } else if ("format".equals(key)) {
+                format = Format.valueOf(value.toUpperCase());
+            } else if ("numResults".equals(key)) {
+                numberOfResults = Integer.parseInt(value);
+            }
+        }
+        if (numberOfResults <= 0 || numberOfResults > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid results to return number: " + numberOfResults);
+        }
+        return new QueryParameter(query, rankerType, format, numberOfResults);
     }
     
     /**
@@ -164,7 +198,7 @@ final class QueryParameter {
     public String toString() {
         return String.format(
                 "QueryParameter={query: %s, rankerType: %s, format: %s, numberOfResults: %s}", 
-                query, rankerType, format, numberOfResults);
+                query, rankerType.name().toLowerCase(), format.name().toLowerCase(), numberOfResults);
     }
     
 }

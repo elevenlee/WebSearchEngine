@@ -43,40 +43,60 @@ public class ServerOptionTest {
      * Test method for {@link edu.nyu.cs.engine.server.ServerOption#newInstance(java.lang.String)}.
      */
     @Test(expected=IllegalSearchEngineConfigurationException.class)
-    public void testNewInstanceWithNoCorpusConfiguration() throws IOException {
-        ServerOption.newInstance("test-files/confs/no-corpus.conf");
+    public void testNewInstanceWithNoCorpusConfiguration() {
+        try {
+            ServerOption.newInstance("test-files/confs/no-corpus.conf");
+        } catch (IOException e) {
+            
+        }
     }
     
     /**
      * Test method for {@link edu.nyu.cs.engine.server.ServerOption#newInstance(java.lang.String)}.
      */
     @Test(expected=IllegalSearchEngineConfigurationException.class)
-    public void testNewInstanceWithNoIndexConfiguration() throws IOException {
-        ServerOption.newInstance("test-files/confs/no-index.conf");
+    public void testNewInstanceWithNoIndexConfiguration() {
+        try {
+            ServerOption.newInstance("test-files/confs/no-index.conf");
+        } catch (IOException e) {
+            
+        }
     }
     
     /**
      * Test method for {@link edu.nyu.cs.engine.server.ServerOption#newInstance(java.lang.String)}.
      */
     @Test(expected=IllegalSearchEngineConfigurationException.class)
-    public void testNewInstanceWithNoIndexerTypeConfiguration() throws IOException {
-        ServerOption.newInstance("test-files/confs/no-indexer-type.conf");
+    public void testNewInstanceWithNoIndexerTypeConfiguration() {
+        try {
+            ServerOption.newInstance("test-files/confs/no-indexer-type.conf");
+        } catch (IOException e) {
+            
+        }
     }
     
     /**
      * Test method for {@link edu.nyu.cs.engine.server.ServerOption#newInstance(java.lang.String)}.
      */
     @Test(expected=IllegalSearchEngineConfigurationException.class)
-    public void testNewInstanceWithNotValidConfiguration() throws IOException {
-        ServerOption.newInstance("test-files/confs/not-valid.conf");
+    public void testNewInstanceWithNotValidConfiguration() {
+        try {
+            ServerOption.newInstance("test-files/confs/not-valid.conf");
+        } catch (IOException e) {
+            
+        }
     }
     
     /**
      * Test method for {@link edu.nyu.cs.engine.server.ServerOption#newInstance(java.lang.String)}.
      */
     @Test(expected=IllegalArgumentException.class)
-    public void testNewInstanceWithNotSuchIndexerType() throws IOException {
-        ServerOption.newInstance("test-files/confs/nonexist-indexer-type.conf");
+    public void testNewInstanceWithNotSuchIndexerType() {
+        try {
+            ServerOption.newInstance("test-files/confs/nonexist-indexer-type.conf");
+        } catch (IOException e) {
+            
+        }
     }
 
     /**

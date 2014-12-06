@@ -2,6 +2,7 @@ package edu.nyu.cs.engine.server;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Arrays;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
@@ -81,7 +82,7 @@ public class SearchEngineServer {
             System.exit(1);
         }
         if (!parseCommandLine(args)) {
-            LOGGER.info("Incorrect parameters detected " + args);
+            LOGGER.info("Incorrect parameters detected " + Arrays.toString(args));
             System.exit(1);
         }
         SearchIndexer indexer = SearchIndexerFactory.getSearchIndexer(option);
