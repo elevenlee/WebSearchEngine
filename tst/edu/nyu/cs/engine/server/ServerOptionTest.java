@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.nyu.cs.engine.exception.IllegalSearchEngineConfigurationException;
+import edu.nyu.cs.engine.index.utils.IndexerType;
 
 public class ServerOptionTest {
     private ServerOption serverOption;
@@ -27,7 +28,7 @@ public class ServerOptionTest {
     public void testNewInstance() {
         assertEquals("test-files/data/simple", serverOption.getCorpusPrefix());
         assertEquals("test-files/data/index", serverOption.getIndexPrefix());
-        assertEquals("fullscan", serverOption.getIndexerType());
+        assertEquals(IndexerType.FULLSCAN, serverOption.getIndexerType());
     }
     
     /**
@@ -69,6 +70,14 @@ public class ServerOptionTest {
     public void testNewInstanceWithNotValidConfiguration() throws IOException {
         ServerOption.newInstance("test-files/confs/not-valid.conf");
     }
+    
+    /**
+     * Test method for {@link edu.nyu.cs.engine.server.ServerOption#newInstance(java.lang.String)}.
+     */
+    @Test(expected=IllegalArgumentException.class)
+    public void testNewInstanceWithNotSuchIndexerType() throws IOException {
+        ServerOption.newInstance("test-files/confs/nonexist-indexer-type.conf");
+    }
 
     /**
      * Test method for {@link edu.nyu.cs.engine.server.ServerOption#equals(java.lang.Object)}.
@@ -91,7 +100,7 @@ public class ServerOptionTest {
      */
     @Test
     public void testEqualsObjectWithNotEqualObject() throws IOException {
-        assertFalse(serverOption.equals(ServerOption.newInstance("test-files/confs/nonexist-indexer-type.conf")));
+        assertFalse(serverOption.equals(ServerOption.newInstance("test-files/confs/other-engine.conf")));
     }
 
     /**

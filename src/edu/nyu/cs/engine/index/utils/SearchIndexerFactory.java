@@ -27,14 +27,14 @@ public class SearchIndexerFactory {
      * @throws IllegalArgumentException if indexer type does not exist
      */
     public static SearchIndexer getSearchIndexer(ServerOption option) {
-        IndexerType type = IndexerType.valueOf(option.getIndexerType().toUpperCase());
-        switch (type) {
+        IndexerType indexerType = option.getIndexerType();
+        switch (indexerType) {
             case FULLSCAN:              // TODO create full scan search indexer object
             case INVERTED_DOCONLY:      // TODO create inverted doc-only search indexer object
             case INVERTED_OCCURRENCE:   // TODO create inverted occurrence search indexer object
             case INVERTED_COMPRESSED:   // TODO create inverted compressed search indexer object
         }
-        throw new IllegalArgumentException("No such search indexer type: " + type);
+        throw new IllegalArgumentException("No such search indexer type: " + indexerType);
     }
 
 }

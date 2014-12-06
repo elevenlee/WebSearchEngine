@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import edu.nyu.cs.engine.exception.IllegalSearchEngineConfigurationException;
+import edu.nyu.cs.engine.index.utils.IndexerType;
 
 /**
  * @author shenli
@@ -25,7 +26,7 @@ public class ServerOption {
     
     private final String corpusPrefix;
     private final String indexPrefix;
-    private final String indexerType;
+    private final IndexerType indexerType;
     private volatile int hashCode;
     
     /**
@@ -36,7 +37,7 @@ public class ServerOption {
      * @param indexPrefix the index prefix
      * @param indexerType the indexer type
      */
-    private ServerOption(String corpusPrefix, String indexPrefix, String indexerType) {
+    private ServerOption(String corpusPrefix, String indexPrefix, IndexerType indexerType) {
         this.corpusPrefix = corpusPrefix;
         this.indexPrefix = indexPrefix;
         this.indexerType = indexerType;
@@ -65,7 +66,7 @@ public class ServerOption {
      * <p>
      * @return indexer type
      */
-    public String getIndexerType() {
+    public IndexerType getIndexerType() {
         return indexerType;
     }
     
@@ -112,7 +113,8 @@ public class ServerOption {
             throw new IllegalSearchEngineConfigurationException(
                     "indexer_type option miss in server configuration file " + optionsFilePath);
         }
-        return new ServerOption(corpusPrefix, indexPrefix, indexerType);
+        return new ServerOption(
+                corpusPrefix, indexPrefix, IndexerType.valueOf(indexerType.toUpperCase()));
     }
     
     /**
@@ -140,7 +142,7 @@ public class ServerOption {
         ServerOption so = (ServerOption) o;
         return corpusPrefix.equals(so.corpusPrefix)
                 && indexPrefix.equals(so.indexPrefix)
-                && indexerType.equals(so.indexerType);
+                && indexerType == so.indexerType;
     }
     
     /**
@@ -172,7 +174,7 @@ public class ServerOption {
     public String toString() {
         return String.format(
                 "ServerOption={corpus_prefix: %s, index_prefix: %s, indexer_type: %s}", 
-                corpusPrefix, indexPrefix, indexerType);
+                corpusPrefix, indexPrefix, indexerType.name().toLowerCase());
     }
     
 }

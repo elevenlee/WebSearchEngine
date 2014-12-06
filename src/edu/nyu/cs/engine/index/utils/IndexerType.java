@@ -5,7 +5,7 @@ package edu.nyu.cs.engine.index.utils;
  * <p>
  * The {@code IndexerType} enum represents the search indexer type.
  */
-enum IndexerType {
+public enum IndexerType {
     /**
      * The indexes contain all appearance terms with scanning the while corpus.
      */
