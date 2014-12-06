@@ -1,13 +1,27 @@
+<!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html"; charset=UTF-8>
-        <title>Web Search Engine Query Test</title>
+        <meta http-equiv="Content-Type" content="text/html" charset=UTF-8>
+        <title>Web Search Engine Search Test</title>
     </head>
     
     <body>
         <form method="get" action="http://localhost:25814/search">
-            Query: <input type="text" name="query"><br/><br/>
-            <input type="submit" value="Submit">
+            <input type="text" name="query" size=100>&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Search">
+            <p>
+            <fieldset>
+                <legend>Options</legend>
+                <br/>
+                <b>Ranker</b> <input type="radio" name="ranker" value="fullscan" checked>Full-scan
+                &nbsp;<input type="radio" name="ranker" value="cosine">Cosine
+                &nbsp;<input type="radio" name="ranker" value="querylikelihood">Query Likelihood
+                &nbsp;<input type="radio" name="ranker" value="phrase">Phrase
+                &nbsp;<input type="radio" name="ranker" value="numberviews">Number Views
+                &nbsp;<input type="radio" name="ranker" value="linear">Linear
+                <p>
+                <b>Format</b> <input type="radio" name="format" value="html" checked>HTML
+                &nbsp;&nbsp;<input type="radio" name="format" value="text">Text
+            </fieldset>
         </form>
     </body>
 </html>
