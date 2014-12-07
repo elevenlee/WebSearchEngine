@@ -37,9 +37,9 @@ public class WebSearchEngineServerHandler implements HttpHandler {
      * See {@link com.sun.net.httpserver.HttpExchange} for a description of the steps involved in handling 
      * an exchange.
      * <p>
-     * @param exchange he exchange containing the request from the client and used to send the response
+     * @param exchange the exchange containing the request from the client and used to send the response
      * @throws NullPointerException if exchange is {@code null}
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     @Override
     public void handle(HttpExchange exchange) throws IOException {
