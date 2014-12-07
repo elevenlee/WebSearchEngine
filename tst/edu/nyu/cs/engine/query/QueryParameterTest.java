@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.nyu.cs.engine.exception.IllegalQueryParameterException;
 import edu.nyu.cs.engine.rank.RankerType;
 
 public class QueryParameterTest {
@@ -51,11 +52,20 @@ public class QueryParameterTest {
     public void testGetNumberOfResults() {
         assertEquals(50, queryParameter.getNumberOfResults());
     }
+    
+    /**
+     * Test method for {@link edu.nyu.cs.engine.query.QueryParameter#newInstance(java.lang.String)}.
+     */
+    @Test
+    public void testNewInstanceWithURLEncode() throws UnsupportedEncodingException {
+        QueryParameter urlencodeQP = QueryParameter.newInstance("query=test%20sample&ranker=fullscan&format=html&numResults=50");
+        assertEquals("test sample", urlencodeQP.getQuery());
+    }
 
     /**
      * Test method for {@link edu.nyu.cs.engine.query.QueryParameter#newInstance(java.lang.String)}.
      */
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected=IllegalQueryParameterException.class)
     public void testNewInstanceWithNonexistRankerType() {
         try {
             QueryParameter.newInstance("query=test sample&ranker=nonexist&format=html&numResults=50");
@@ -67,7 +77,7 @@ public class QueryParameterTest {
     /**
      * Test method for {@link edu.nyu.cs.engine.query.QueryParameter#newInstance(java.lang.String)}.
      */
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected=IllegalQueryParameterException.class)
     public void testNewInstanceWithNonexistFormatType() {
         try {
             QueryParameter.newInstance("query=test sample&ranker=fullscan&format=json&numResults=50");
@@ -79,7 +89,79 @@ public class QueryParameterTest {
     /**
      * Test method for {@link edu.nyu.cs.engine.query.QueryParameter#newInstance(java.lang.String)}.
      */
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected=IllegalQueryParameterException.class)
+    public void testNewInstanceWithIinvalidNumResults() {
+        try {
+            QueryParameter.newInstance("query=test sample&ranker=fullscan&format=html&numResults=invalid");
+        } catch (UnsupportedEncodingException e) {
+            
+        }
+    }
+    
+    /**
+     * Test method for {@link edu.nyu.cs.engine.query.QueryParameter#newInstance(java.lang.String)}.
+     */
+    @Test(expected=IllegalQueryParameterException.class)
+    public void testNewInstanceWithNonexistQueryArgument() {
+        try {
+            QueryParameter.newInstance("ranker=fullscan&format=html&numResults=50");
+        } catch (UnsupportedEncodingException e) {
+            
+        }
+    }
+    
+    /**
+     * Test method for {@link edu.nyu.cs.engine.query.QueryParameter#newInstance(java.lang.String)}.
+     */
+    @Test(expected=IllegalQueryParameterException.class)
+    public void testNewInstanceWithEmptyQueryArgument() {
+        try {
+            QueryParameter.newInstance("query=&ranker=fullscan&format=html&numResults=50");
+        } catch (UnsupportedEncodingException e) {
+            
+        }
+    }
+    
+    /**
+     * Test method for {@link edu.nyu.cs.engine.query.QueryParameter#newInstance(java.lang.String)}.
+     */
+    @Test(expected=IllegalQueryParameterException.class)
+    public void testNewInstanceWithNonexistRankerArgument() {
+        try {
+            QueryParameter.newInstance("query=test sample&format=html&numResults=50");
+        } catch (UnsupportedEncodingException e) {
+            
+        }
+    }
+    
+    /**
+     * Test method for {@link edu.nyu.cs.engine.query.QueryParameter#newInstance(java.lang.String)}.
+     */
+    @Test(expected=IllegalQueryParameterException.class)
+    public void testNewInstanceWithNonexistFormatArgument() {
+        try {
+            QueryParameter.newInstance("query=test sample&ranker=fullscan&numResults=50");
+        } catch (UnsupportedEncodingException e) {
+            
+        }
+    }
+    
+    /**
+     * Test method for {@link edu.nyu.cs.engine.query.QueryParameter#newInstance(java.lang.String)}.
+     */
+    @Test(expected=IllegalQueryParameterException.class)
+    public void testNewInstanceWithNonexistNumResultsArgument() {
+        try {
+            QueryParameter.newInstance("query=test sample&ranker=fullscan&format=html");
+        } catch (UnsupportedEncodingException e) {
+            
+        }
+    }
+    
+    /**
+     * Test method for {@link edu.nyu.cs.engine.query.QueryParameter#newInstance(java.lang.String)}.
+     */
+    @Test(expected=IllegalQueryParameterException.class)
     public void testNewInstanceWithNegativeNumResults() {
         try {
             QueryParameter.newInstance("query=test sample&ranker=fullscan&format=html&numResults=-10");

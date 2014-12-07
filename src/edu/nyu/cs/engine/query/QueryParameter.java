@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.logging.Logger;
 
+import edu.nyu.cs.engine.exception.IllegalQueryParameterException;
 import edu.nyu.cs.engine.rank.RankerType;
 
 /**
@@ -98,22 +99,21 @@ final class QueryParameter {
 
     /**
      * Creates a new instance of the {@code QueryParameter} object so that it records CGI arguments of a 
-     * single HTTP search query request via URL. If any required parameters not in HTTP requests, this method 
-     * would provide missing parameters to the default values.
+     * single HTTP search query request via URL. If any required parameters not in HTTP requests, 
+     * {@link edu.nyu.cs.engine.exception.IllegalQueryParameterException} would be thrown.
      * <p>
      * @param uri the uri contains HTTP request arguments
      * @return a newly allocated instance of the {@code QueryParameter} object
      * @throws UnsupportedEncodingException if the named encoding is not supported
-     * @throws IllegalArugmentException if number of results less than or equals to 0, or greater than maximum
-     * value of {@link java.lang.Integer}
+     * @throws IllegalQueryParameterException if any required arguments not present in requests or invalid 
+     * arguments value provided
      */
     static QueryParameter newInstance(String uri) throws UnsupportedEncodingException {
         final String[] parameters = uri.split("&");
-        // Default values
-        String query = "";
-        RankerType rankerType = RankerType.FULLSCAN;
-        Format format = Format.HTML;
-        int numberOfResults = 10;
+        String query = null;
+        RankerType rankerType = null;
+        Format format = null;
+        int numberOfResults = 0;
         for (String param : parameters) {
             final String[] keyValue = param.split("=", 2);
             if (keyValue.length < 2) {
@@ -125,15 +125,42 @@ final class QueryParameter {
             if ("query".equals(key)) {
                 query = value;
             } else if ("ranker".equals(key)) {
-                rankerType = RankerType.valueOf(value.toUpperCase());
+                try {
+                    rankerType = RankerType.valueOf(value.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalQueryParameterException("ranker", value, "No such search ranker type");
+                }
             } else if ("format".equals(key)) {
-                format = Format.valueOf(value.toUpperCase());
+                try {
+                    format = Format.valueOf(value.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalQueryParameterException("format", value, "No such search results type");
+                }
             } else if ("numResults".equals(key)) {
-                numberOfResults = Integer.parseInt(value);
+                try {
+                    numberOfResults = Integer.parseInt(value);
+                } catch (NumberFormatException e) {
+                    throw new IllegalQueryParameterException("numResults", value, "Invalid number format");
+                }
             }
         }
-        if (numberOfResults <= 0 || numberOfResults > Integer.MAX_VALUE) {
-            throw new IllegalArgumentException("Invalid results to return number: " + numberOfResults);
+        if (query == null) {
+            throw new IllegalQueryParameterException("query", query, "Not found search query");
+        } else if ("".equals(query)) {
+            throw new IllegalQueryParameterException("query", query, "Not found search query");
+        } else if (rankerType == null) {
+            throw new IllegalQueryParameterException("ranker", null, "Not found search ranker type");
+        } else if (format == null) {
+            throw new IllegalQueryParameterException("format", null, "Not found search results format");
+        } else if (numberOfResults == 0) {
+            throw new IllegalQueryParameterException(
+                    "numResults", String.valueOf(numberOfResults), "Not found results to return number");
+        } else if (numberOfResults < 0) {
+            throw new IllegalQueryParameterException(
+                    "numResults", String.valueOf(numberOfResults), "Negative results to return number");
+        } else if (numberOfResults > Integer.MAX_VALUE) {
+            throw new IllegalQueryParameterException(
+                    "numResults", String.valueOf(numberOfResults), "Too large results to return number");
         }
         return new QueryParameter(query, rankerType, format, numberOfResults);
     }
