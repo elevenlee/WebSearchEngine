@@ -4,12 +4,12 @@ package edu.nyu.cs.engine.document;
  * @author shenli
  * <p>
  * The {@code BasicDocument} class represents the basic information of searching documents. Conceptually, it 
- * is the root of the basic implementation, and provides the primary access to the document's data.
+ * is the root of the basic document implementation, and provides the primary access to the document's data.
  * <p>
  * {@code BasicDocument} are constant; their value could not be changed after they are created. Because 
  * {@code BasicDocument} objects are immutable they could be shared.
  */
-public class BasicDocument {
+public final class BasicDocument {
     private final int id;
     private final String title;
     private final String url;

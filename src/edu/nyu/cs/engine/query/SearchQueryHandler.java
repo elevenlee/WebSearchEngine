@@ -3,12 +3,15 @@ package edu.nyu.cs.engine.query;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.logging.Logger;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import edu.nyu.cs.engine.document.ScoredDocument;
 import edu.nyu.cs.engine.exception.IllegalQueryParameterException;
 import edu.nyu.cs.engine.index.SearchIndexer;
 import edu.nyu.cs.engine.rank.SearchRanker;
@@ -97,11 +100,11 @@ public final class SearchQueryHandler implements HttpHandler {
                 SearchRankerFactory.getSearchRanker(queryParameter.getRankerType(), indexer);
         // TODO process incoming search query
         // TODO using indexer to fetch the search results
-        
+        Collection<ScoredDocument> scoredDocuments = Collections.emptyList();
         // TODO construct search results in either html or text
         switch (queryParameter.getFormat()) {
-            case HTML: response(exchange, getSearchResultsInHTMLFormat()); break;
-            case TEXT: response(exchange, getSearchResultsInTextFormat()); break;
+            case HTML: response(exchange, getSearchResultsInHTMLFormat(scoredDocuments)); break;
+            case TEXT: response(exchange, getSearchResultsInTextFormat(scoredDocuments)); break;
         }
         LOGGER.info("Complete search query: " +  queryParameter.getQuery());
     }
@@ -119,7 +122,15 @@ public final class SearchQueryHandler implements HttpHandler {
         responseBody.close();
     }
     
-    private static String getSearchResultsInHTMLFormat() {
+    /**
+     * Returns the string representation of each scored documentation in collection {@code scoredDocuments} 
+     * with HTML syntax. The string consists of the document id, title as well as score of each document and 
+     * also includes necessary HTML components.
+     * <p>
+     * @param scoredDocuments the collection of scored documents for which to be returned
+     * @return string comprising each scored documentation with HTML components
+     */
+    private static String getSearchResultsInHTMLFormat(Collection<ScoredDocument> scoredDocuments) {
         StringBuilder sb = new StringBuilder();
         sb.append("<!DOCTYPE html>")
           .append(" <html>")
@@ -133,16 +144,37 @@ public final class SearchQueryHandler implements HttpHandler {
           .append("                 <th style=\"background-color:lightgreen\">Title</th>")
           .append("                 <th style=\"background-color:lightgreen\">Score</th>")
           .append("             </tr>");
-        // TODO hook in search results in html format
+        for (ScoredDocument sd : scoredDocuments) {
+            sb.append("         <tr>")
+              .append("             <td>" + sd.getDocument().getId() + "</td>")
+              .append("             <td>" + sd.getDocument().getTitle() + "</td>")
+              .append("             <td>" + sd.getScore() + "</td>")
+              .append("         </tr>");
+        }
         sb.append("         </table>")
           .append("     </body>")
           .append(" </html>");
         return sb.toString();
     }
     
-    private static String getSearchResultsInTextFormat() {
+    /**
+     * Returns the string representation of each scored documentation in collection {@code scoredDocuments} 
+     * with plain text syntax. The string consists of the document id, title as well as score of each document 
+     * that each field is separated by a tab.
+     * <p>
+     * @param scoredDocuments the collection of scored documents for which to be returned
+     * @return string comprising each scored documentation
+     */
+    private static String getSearchResultsInTextFormat(Collection<ScoredDocument> scoredDocuments) {
         StringBuilder sb = new StringBuilder();
-        // TODO hook in search results in text format
+        for (ScoredDocument sd : scoredDocuments) {
+            sb.append(sd.getDocument().getId())
+              .append('\t')
+              .append(sd.getDocument().getTitle())
+              .append('\t')
+              .append(sd.getScore())
+              .append('\n');
+        }
         return sb.toString();
     }
 
