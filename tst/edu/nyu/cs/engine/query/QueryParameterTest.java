@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.nyu.cs.engine.exception.IllegalQueryParameterException;
-import edu.nyu.cs.engine.rank.RankerType;
+import edu.nyu.cs.engine.rank.utils.RankerType;
 
 public class QueryParameterTest {
     private QueryParameter queryParameter;

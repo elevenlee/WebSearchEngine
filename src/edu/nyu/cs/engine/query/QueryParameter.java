@@ -5,7 +5,7 @@ import java.net.URLDecoder;
 import java.util.logging.Logger;
 
 import edu.nyu.cs.engine.exception.IllegalQueryParameterException;
-import edu.nyu.cs.engine.rank.RankerType;
+import edu.nyu.cs.engine.rank.utils.RankerType;
 
 /**
  * @author shenli

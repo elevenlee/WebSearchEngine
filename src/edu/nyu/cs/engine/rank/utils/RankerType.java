@@ -1,4 +1,4 @@
-package edu.nyu.cs.engine.rank;
+package edu.nyu.cs.engine.rank.utils;
 
 /**
  * @author shenli
