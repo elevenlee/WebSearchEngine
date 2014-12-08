@@ -33,10 +33,10 @@ public class SearchIndexerFactory {
     public static SearchIndexer getSearchIndexer(ServerOption option) {
         IndexerType indexerType = option.getIndexerType();
         switch (indexerType) {
-            case FULLSCAN:              return new FullscanIndexer();
-            case INVERTED_DOCONLY:      return new InvertedDocOnlyIndexer();
-            case INVERTED_OCCURRENCE:   return new InvertedOccurrenceIndexer();
-            case INVERTED_COMPRESSED:   return new InvertedCompressedIndexer();
+            case FULLSCAN:              return new FullscanIndexer(option);
+            case INVERTED_DOCONLY:      return new InvertedDocOnlyIndexer(option);
+            case INVERTED_OCCURRENCE:   return new InvertedOccurrenceIndexer(option);
+            case INVERTED_COMPRESSED:   return new InvertedCompressedIndexer(option);
         }
         throw new IllegalArgumentException("No such search indexer type: " + indexerType);
     }

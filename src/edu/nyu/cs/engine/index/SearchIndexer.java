@@ -2,6 +2,10 @@ package edu.nyu.cs.engine.index;
 
 import java.io.IOException;
 
+import edu.nyu.cs.engine.document.BasicDocument;
+import edu.nyu.cs.engine.query.SearchQuery;
+import edu.nyu.cs.engine.server.ServerOption;
+
 /**
  * @author shenli
  * <p>
@@ -10,10 +14,65 @@ import java.io.IOException;
  * <p>
  * To implement a specific indexer type, the programmer needs to extend this abstract class and provides
  * concrete implementation for all abstract methods in this class so that certain search indexer could run
- * basic {@code construct} as well as {@code load} operations successfully.
+ * basic operations successfully.
  */
 public abstract class SearchIndexer {
+    protected final ServerOption serverOption;
+    protected int numberOfDocs = 0;
+    protected long totalTermFrequency = 0;
+    
+    /**
+     * Initializes a newly created {@code SearchIndexer} object so that it records basic arguments using in 
+     * search indexing process.
+     * <p>
+     * @param serverOption the search engine server option
+     */
+    public SearchIndexer(ServerOption serverOption) {
+        this.serverOption = serverOption;
+    }
+    
+    /**
+     * Returns the number of documents in the corpus.
+     * <p>
+     * @return the number of documents in the corpus
+     */
+    public final int getNumberOfDocs() {
+        return numberOfDocs;
+    }
+    
+    /**
+     * Returns the number of term occurrences in the corpus. For example, if a term appears 10 times, it will 
+     * be counted 10 times.
+     * <p>
+     * @return the number of term occurrences in the corpus
+     */
+    public final long getTotalTermFrequency() {
+        return totalTermFrequency;
+    }
 
+    /**
+     * Returns the {@link edu.nyu.cs.engine.document.BasicDocument} object or its subclass instance based on 
+     * the document id.
+     * <p>
+     * @param docId the document id
+     * @return the {@link edu.nyu.cs.engine.document.BasicDocument} object or its subclass instance based on 
+     * the document id
+     */
+    public abstract BasicDocument getDocument(int docId);
+    
+    /**
+     * Returns the {@link edu.nyu.cs.engine.document.BasicDocument} object or its subclass instance which is 
+     * the next {@link edu.nyu.cs.engine.document.BasicDocument} object after specific {@code docId} satisfying 
+     * the search query. If no such document exists, return {@code null}.
+     * <p>
+     * @param query the search query
+     * @param docId the document id
+     * @return the {@link edu.nyu.cs.engine.document.BasicDocument} object or its subclass instance which is 
+     * the next {@link edu.nyu.cs.engine.document.BasicDocument} object after specific {@code docId} satisfying 
+     * the search query
+     */
+    public abstract BasicDocument nextDocument(SearchQuery query, int docId);
+    
     /**
      * Called when the {@link edu.nyu.cs.engine.server.SearchEngineServer} object is in 
      * {@link edu.nyu.cs.engine.server.ServerMode#INDEX} mode. The search indexes are constructed from the
@@ -42,5 +101,46 @@ public abstract class SearchIndexer {
      * @throws ClassNotFoundException if the class cannot be located
      */
     public abstract void load() throws IOException, ClassNotFoundException;
+    
+    /**
+     * Returns the string representation term by its index.
+     * <p>
+     * @param index the term index
+     * @return the string representation term by its index
+     */
+    public abstract String getTermByIndex(int index);
+    
+    /**
+     * Returns the term index based on the string representation term.
+     * <p>
+     * @param term the string representation term
+     * @return the term index based on the string representation term
+     */
+    public abstract int getIndexByTerm(String term);
+    
+    /**
+     * Returns the number of times that specific {@code term} appeared in the entire corpus.
+     * <p>
+     * @param term the string representation term
+     * @return the number of times that specific {@code term} appeared in the entire corpus
+     */
+    public abstract int getTermFrequency(String term);
+    
+    /**
+     * Returns the number of documents in which {@code term} appears over entire corpus.
+     * <p>
+     * @param term the string representation term
+     * @return the number of documents in which {@code term} appears over entire corpus
+     */
+    public abstract int getDocumentFrequencyByTerm(String term);
+    
+    /**
+     * Returns the number of times that {@code term} appeared in the specific document {@code url}.
+     * <p>
+     * @param term the string representation term
+     * @param url the document url
+     * @return the number of times that {@code term} appeared in the specific document {@code url}
+     */
+    public abstract int getTermFrequencyByDocument(String term, String url);
     
 }
