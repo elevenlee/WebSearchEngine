@@ -25,7 +25,7 @@ import edu.nyu.cs.engine.query.SearchQuery;
  * {@code PhraseQuery} objects are not thread-safe. If multiple threads access a {@code PhraseQuery} instance 
  * concurrently, and at least one of the threads modifies it structurally, it must be synchronized externally.
  */
-public class PhraseQuery implements SearchQuery<List<String>> {
+public class PhraseQuery implements SearchQuery {
     private final String query;
     private final List<List<String>> phrases = new ArrayList<>();
     
@@ -44,7 +44,6 @@ public class PhraseQuery implements SearchQuery<List<String>> {
      * <p>
      * @return the raw search query
      */
-    @Override
     public String getQuery() {
         return query;
     }
@@ -58,8 +57,7 @@ public class PhraseQuery implements SearchQuery<List<String>> {
      * @return an unmodifiable view of the specified list. If no phrase token have been collected, returns an 
      * empty list
      */
-    @Override
-    public List<List<String>> getTokens() {
+    public List<List<String>> getPhrases() {
         return Collections.unmodifiableList(phrases);
     }
 
