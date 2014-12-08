@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
 import com.sun.net.httpserver.Headers;
@@ -14,6 +14,7 @@ import com.sun.net.httpserver.HttpHandler;
 import edu.nyu.cs.engine.document.ScoredDocument;
 import edu.nyu.cs.engine.exception.IllegalQueryParameterException;
 import edu.nyu.cs.engine.index.SearchIndexer;
+import edu.nyu.cs.engine.query.impl.PhraseQuery;
 import edu.nyu.cs.engine.rank.SearchRanker;
 import edu.nyu.cs.engine.rank.utils.SearchRankerFactory;
 
@@ -98,10 +99,12 @@ public final class SearchQueryHandler implements HttpHandler {
         
         SearchRanker searchRanker = 
                 SearchRankerFactory.getSearchRanker(queryParameter.getRankerType(), indexer);
-        // TODO process incoming search query
-        // TODO using indexer to fetch the search results
-        Collection<ScoredDocument> scoredDocuments = Collections.emptyList();
-        // TODO construct search results in either html or text
+        // Process the raw search query
+        SearchQuery query = new PhraseQuery(queryParameter.getQuery());
+        query.processQuery();
+        
+        List<ScoredDocument> scoredDocuments = 
+                searchRanker.runQuery(query, queryParameter.getNumberOfResults());
         switch (queryParameter.getFormat()) {
             case HTML: response(exchange, getSearchResultsInHTMLFormat(scoredDocuments)); break;
             case TEXT: response(exchange, getSearchResultsInTextFormat(scoredDocuments)); break;

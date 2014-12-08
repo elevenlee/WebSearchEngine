@@ -1,5 +1,9 @@
 package edu.nyu.cs.engine.rank.impl;
 
+import java.util.List;
+
+import edu.nyu.cs.engine.document.ScoredDocument;
+import edu.nyu.cs.engine.query.SearchQuery;
 import edu.nyu.cs.engine.rank.SearchRanker;
 
 /**
@@ -7,5 +11,11 @@ import edu.nyu.cs.engine.rank.SearchRanker;
  * <p>
  */
 public class PhraseRanker extends SearchRanker {
+
+    @Override
+    public List<ScoredDocument> runQuery(SearchQuery query, int numberOfResults) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }
