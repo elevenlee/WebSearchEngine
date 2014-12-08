@@ -39,7 +39,7 @@ public class PhraseQueryTest {
                 Arrays.asList("bar", "or"),
                 Arrays.asList("baz"));
         phraseQuery.processQuery();
-        assertEquals(phrases, phraseQuery.getPhrases());
+        assertEquals(phrases, phraseQuery.getTokens());
     }
     
     /**
@@ -49,7 +49,7 @@ public class PhraseQueryTest {
     public void testProcessQueryWithNullQuery() {
         PhraseQuery pq = new PhraseQuery(null);
         pq.processQuery();
-        assertEquals(Collections.emptyList(), pq.getPhrases());
+        assertEquals(Collections.emptyList(), pq.getTokens());
     }
     
     /**
@@ -59,7 +59,7 @@ public class PhraseQueryTest {
     public void testProcessQueryWithEmptyQuery() {
         PhraseQuery pq = new PhraseQuery("");
         pq.processQuery();
-        assertEquals(Collections.emptyList(), pq.getPhrases());
+        assertEquals(Collections.emptyList(), pq.getTokens());
     }
     
     /**
@@ -79,7 +79,7 @@ public class PhraseQueryTest {
                 Arrays.asList("this"),
                 Arrays.asList("test", "case"));
         pq.processQuery();
-        assertEquals(phrases, pq.getPhrases());
+        assertEquals(phrases, pq.getTokens());
     }
     
     /**
@@ -94,7 +94,7 @@ public class PhraseQueryTest {
                 Arrays.asList("bar", "or"),
                 Arrays.asList("baz"));
         pq.processQuery();
-        assertEquals(phrases, pq.getPhrases());
+        assertEquals(phrases, pq.getTokens());
     }
     
     /**
@@ -109,7 +109,7 @@ public class PhraseQueryTest {
                 Arrays.asList("or"),
                 Arrays.asList("baz"));
         pq.processQuery();
-        assertEquals(phrases, pq.getPhrases());
+        assertEquals(phrases, pq.getTokens());
     }
 
     /**

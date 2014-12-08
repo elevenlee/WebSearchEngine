@@ -21,7 +21,7 @@ import edu.nyu.cs.engine.query.SearchQuery;
  * {@code WordQuery} objects are not thread-safe. If multiple threads access a {@code WordQuery} instance 
  * concurrently, and at least one of the threads modifies it structurally, it must be synchronized externally.
  */
-public class WordQuery implements SearchQuery {
+public class WordQuery implements SearchQuery<String> {
     private final String query;
     private final List<String> tokens = new ArrayList<>();
     
@@ -40,6 +40,7 @@ public class WordQuery implements SearchQuery {
      * <p>
      * @return the raw search query
      */
+    @Override
     public String getQuery() {
         return query;
     }
@@ -53,6 +54,7 @@ public class WordQuery implements SearchQuery {
      * @return an unmodifiable view of the specified list. If no word token have been collected, returns an 
      * empty list
      */
+    @Override
     public List<String> getTokens() {
         return Collections.unmodifiableList(tokens);
     }
