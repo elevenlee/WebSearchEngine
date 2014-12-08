@@ -3,6 +3,7 @@ package edu.nyu.cs.engine.rank;
 import java.util.List;
 
 import edu.nyu.cs.engine.document.ScoredDocument;
+import edu.nyu.cs.engine.index.SearchIndexer;
 import edu.nyu.cs.engine.query.SearchQuery;
 
 /**
@@ -16,6 +17,17 @@ import edu.nyu.cs.engine.query.SearchQuery;
  * basic {@code runQuery} operations successfully.
  */
 public abstract class SearchRanker {
+    protected final SearchIndexer searchIndexer;
+    
+    /**
+     * Initializes a newly created {@code SearchRanker} object so that it records basic arguments using in 
+     * search ranking process.
+     * <p>
+     * @param searchIndexer the search indexer
+     */
+    public SearchRanker(SearchIndexer searchIndexer) {
+        this.searchIndexer = searchIndexer;
+    }
 
     /**
      * Returns an unmodifiable view of the scored documents list collected by the specific search rank model. 

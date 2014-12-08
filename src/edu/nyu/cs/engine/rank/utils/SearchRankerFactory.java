@@ -36,12 +36,12 @@ public class SearchRankerFactory {
     public static SearchRanker getSearchRanker(
             RankerType rankerType, SearchIndexer searchIndexer) {
         switch (rankerType) {
-            case FULLSCAN:          return new FullscanRanker();
-            case COSINE:            return new CosineRanker();
-            case QUERYLIKELIHOOD:   return new QueryLikelihoodRanker();
-            case PHRASE:            return new PhraseRanker();
-            case NUMBERVIEWS:       return new NumberViewsRanker();
-            case LINEAR:            return new LinearRanker();
+            case FULLSCAN:          return new FullscanRanker(searchIndexer);
+            case COSINE:            return new CosineRanker(searchIndexer);
+            case QUERYLIKELIHOOD:   return new QueryLikelihoodRanker(searchIndexer);
+            case PHRASE:            return new PhraseRanker(searchIndexer);
+            case NUMBERVIEWS:       return new NumberViewsRanker(searchIndexer);
+            case LINEAR:            return new LinearRanker(searchIndexer);
         }
         throw new IllegalArgumentException("No such search ranker type: " + rankerType);
     }
