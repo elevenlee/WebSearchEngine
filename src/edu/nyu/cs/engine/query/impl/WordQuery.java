@@ -11,11 +11,11 @@ import edu.nyu.cs.engine.query.SearchQuery;
  * @author shenli
  * <p>
  * The {@code WordQuery} based implementation of the {@link edu.nyu.cs.engine.query.SearchQuery} interface.
- * This implementation represents single word tokens list which collected based on the search query of 
+ * This implementation represents single word tokens list which collected based on the raw search query of 
  * splitting around the whitespace.
  * <p>
- * The search query "foo and bar", for example, yields the following word token results: 
- * {@literal {"foo", "and", "bar"}}.
+ * The raw search query "foo and bar", for example, yields the following word token results: 
+ * {@literal ["foo", "and", "bar"]}.
  * <p>
  * Note: {@code WordQuery} objects are mutable; their value could be changed after they are created. Thus, 
  * {@code WordQuery} objects are not thread-safe. If multiple threads access a {@code WordQuery} instance 
@@ -25,14 +25,20 @@ public class WordQuery implements SearchQuery {
     private final String query;
     private final List<String> tokens = new ArrayList<>();
     
+    /**
+     * Initializes a newly created {@code WordQuery} object so that it records word tokens list collected based 
+     * on the raw search query.
+     * <p>
+     * @param query the raw search query
+     */
     public WordQuery(String query) {
         this.query = query;
     }
     
     /**
-     * Returns the search query.
+     * Returns the raw search query.
      * <p>
-     * @return the search query
+     * @return the raw search query
      */
     public String getQuery() {
         return query;
@@ -52,7 +58,7 @@ public class WordQuery implements SearchQuery {
     }
 
     /**
-     * Separate the search query by whitespace and collect word tokens into the list.
+     * Separate the raw search query by whitespace and collect word tokens into the list.
      */
     @Override
     public void processQuery() {
