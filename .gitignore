@@ -1,4 +1,5 @@
 bin/
+test-files/data/index
 .classpath
 .project
 .settings/
