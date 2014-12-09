@@ -14,11 +14,8 @@ public class ScoredDocumentTest {
     @Before
     public void setUp() throws Exception {
         this.scoredDocument = new ScoredDocument(
-                new BasicDocument.BasicDocumentBuilder(1)
-                        .title("test doc")
-                        .url("http://localhost/test.html")
-                        .pageRank(1.1f)
-                        .numberOfViews(100).build(),
+                new SearchDocument(
+                        1, "test doc", "http://localhost/test.html", 1.1f, 100),
                 123.456);
     }
 
@@ -27,11 +24,8 @@ public class ScoredDocumentTest {
      */
     @Test
     public void testGetDocument() {
-        BasicDocument sd = new BasicDocument.BasicDocumentBuilder(1)
-                                .title("test doc")
-                                .url("http://localhost/test.html")
-                                .pageRank(1.1f)
-                                .numberOfViews(100).build();
+        SearchDocument sd = new SearchDocument(
+                1, "test doc", "http://localhost/test.html", 1.1f, 100);
         assertEquals(sd, scoredDocument.getDocument());
     }
 
@@ -65,7 +59,7 @@ public class ScoredDocumentTest {
     @Test
     public void testEqualsObjectWithEqualObject() {
         ScoredDocument sd = new ScoredDocument(
-                new BasicDocument.BasicDocumentBuilder(1).build(),
+                new SearchDocument(1, "same score"),
                 123.4560);
         assertTrue(scoredDocument.equals(sd));
     }
@@ -76,11 +70,8 @@ public class ScoredDocumentTest {
     @Test
     public void testEqualsObjectWithNotEqualObject() {
         ScoredDocument sd = new ScoredDocument(
-                new BasicDocument.BasicDocumentBuilder(1)
-                        .title("test doc")
-                        .url("http://localhost/test.html")
-                        .pageRank(1.1f)
-                        .numberOfViews(100).build(),
+                new SearchDocument(
+                        1, "test doc", "http://localhost/test.html", 1.1f, 100),
                 1.01);
         assertFalse(scoredDocument.equals(sd));
     }
@@ -91,7 +82,7 @@ public class ScoredDocumentTest {
     @Test
     public void testToString() {
         assertEquals(
-                "ScoredDocument={document: BasicDocument={id: 1, title: test doc, url: http://localhost/test.html, page rank: 1.1, number of views: 100}, score: 123.456}", 
+                "ScoredDocument={document: BasicDocument={id: 1, title: test doc, url: http://localhost/test.html, page rank: 1.100, number of views: 100}, score: 123.456}", 
                 scoredDocument.toString());
     }
 
@@ -101,7 +92,7 @@ public class ScoredDocumentTest {
     @Test
     public void testCompareToWithGreaterObject() {
         ScoredDocument sd = new ScoredDocument(
-                new BasicDocument.BasicDocumentBuilder(1).build(),
+                new SearchDocument(1, "greater than test doc"),
                 999.9999);
         assertTrue(scoredDocument.compareTo(sd) < 0);
     }
@@ -112,7 +103,7 @@ public class ScoredDocumentTest {
     @Test
     public void testCompareToWithEquallyObject() {
         ScoredDocument sd = new ScoredDocument(
-                new BasicDocument.BasicDocumentBuilder(1).build(),
+                new SearchDocument(1, "same score doc"),
                 123.456000);
         assertTrue(scoredDocument.compareTo(sd) == 0);
     }
@@ -123,7 +114,7 @@ public class ScoredDocumentTest {
     @Test
     public void testCompareToWithLessObject() {
         ScoredDocument sd = new ScoredDocument(
-                new BasicDocument.BasicDocumentBuilder(1).build(),
+                new SearchDocument(1, "less score"),
                 10.003);
         assertTrue(scoredDocument.compareTo(sd) > 0);
     }

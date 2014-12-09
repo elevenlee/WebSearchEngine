@@ -2,7 +2,7 @@ package edu.nyu.cs.engine.index;
 
 import java.io.IOException;
 
-import edu.nyu.cs.engine.document.BasicDocument;
+import edu.nyu.cs.engine.document.SearchDocument;
 import edu.nyu.cs.engine.query.SearchQuery;
 import edu.nyu.cs.engine.server.ServerOption;
 
@@ -20,6 +20,14 @@ public abstract class SearchIndexer {
     protected final ServerOption serverOption;
     protected int numberOfDocs = 0;
     protected long totalTermFrequency = 0;
+    
+    /**
+     * Initializes a newly created {@code SearchIndexer} object with no server option object. This constructor 
+     * is provided for serialization usage.
+     */
+    public SearchIndexer() {
+        this.serverOption = null;
+    }
     
     /**
      * Initializes a newly created {@code SearchIndexer} object so that it records basic arguments using in 
@@ -51,27 +59,27 @@ public abstract class SearchIndexer {
     }
 
     /**
-     * Returns the {@link edu.nyu.cs.engine.document.BasicDocument} object or its subclass instance based on 
+     * Returns the {@link edu.nyu.cs.engine.document.SearchDocument} object or its subclass instance based on 
      * the document id.
      * <p>
      * @param docId the document id
-     * @return the {@link edu.nyu.cs.engine.document.BasicDocument} object or its subclass instance based on 
+     * @return the {@link edu.nyu.cs.engine.document.SearchDocument} object or its subclass instance based on 
      * the document id
      */
-    public abstract BasicDocument getDocument(int docId);
+    public abstract SearchDocument getDocument(int docId);
     
     /**
-     * Returns the {@link edu.nyu.cs.engine.document.BasicDocument} object or its subclass instance which is 
-     * the next {@link edu.nyu.cs.engine.document.BasicDocument} object after specific {@code docId} satisfying 
+     * Returns the {@link edu.nyu.cs.engine.document.SearchDocument} object or its subclass instance which is 
+     * the next {@link edu.nyu.cs.engine.document.SearchDocument} object after specific {@code docId} satisfying 
      * the search query. If no such document exists, return {@code null}.
      * <p>
      * @param query the search query
      * @param docId the document id
-     * @return the {@link edu.nyu.cs.engine.document.BasicDocument} object or its subclass instance which is 
-     * the next {@link edu.nyu.cs.engine.document.BasicDocument} object after specific {@code docId} satisfying 
+     * @return the {@link edu.nyu.cs.engine.document.SearchDocument} object or its subclass instance which is 
+     * the next {@link edu.nyu.cs.engine.document.SearchDocument} object after specific {@code docId} satisfying 
      * the search query
      */
-    public abstract BasicDocument nextDocument(SearchQuery query, int docId);
+    public abstract SearchDocument nextDocument(SearchQuery query, int docId);
     
     /**
      * Called when the {@link edu.nyu.cs.engine.server.SearchEngineServer} object is in 

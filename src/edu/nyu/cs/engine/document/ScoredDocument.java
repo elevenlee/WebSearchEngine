@@ -11,11 +11,11 @@ package edu.nyu.cs.engine.document;
  * {@code ScoredDocument} objects are immutable they could be shared.
  */
 public final class ScoredDocument implements Comparable<ScoredDocument> {
-    private final BasicDocument document;
+    private final SearchDocument document;
     private final double score;
     private volatile int hashCode;
     
-    public ScoredDocument(BasicDocument document, double score) {
+    public ScoredDocument(SearchDocument document, double score) {
         this.document = document;
         this.score = score;
     }
@@ -25,7 +25,7 @@ public final class ScoredDocument implements Comparable<ScoredDocument> {
      * <p>
      * @return the basic document
      */
-    public BasicDocument getDocument() {
+    public SearchDocument getDocument() {
         return document;
     }
 
@@ -91,7 +91,7 @@ public final class ScoredDocument implements Comparable<ScoredDocument> {
     @Override
     public String toString() {
         return String.format(
-                "ScoredDocument={document: %s, score: %s}", document, score);
+                "ScoredDocument={document: %s, score: %.3f}", document, score);
     }
 
     /**

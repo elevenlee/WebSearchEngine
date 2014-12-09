@@ -2,7 +2,7 @@ package edu.nyu.cs.engine.index.impl;
 
 import java.io.IOException;
 
-import edu.nyu.cs.engine.document.BasicDocument;
+import edu.nyu.cs.engine.document.SearchDocument;
 import edu.nyu.cs.engine.index.SearchIndexer;
 import edu.nyu.cs.engine.query.SearchQuery;
 import edu.nyu.cs.engine.server.ServerOption;
@@ -12,20 +12,19 @@ import edu.nyu.cs.engine.server.ServerOption;
  *
  */
 public class InvertedOccurrenceIndexer extends SearchIndexer {
-
+    
     public InvertedOccurrenceIndexer(ServerOption serverOption) {
         super(serverOption);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
-    public BasicDocument getDocument(int docId) {
+    public SearchDocument getDocument(int docId) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public BasicDocument nextDocument(SearchQuery query, int docId) {
+    public SearchDocument nextDocument(SearchQuery query, int docId) {
         // TODO Auto-generated method stub
         return null;
     }

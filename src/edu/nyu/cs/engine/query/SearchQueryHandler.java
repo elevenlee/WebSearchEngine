@@ -14,7 +14,7 @@ import com.sun.net.httpserver.HttpHandler;
 import edu.nyu.cs.engine.document.ScoredDocument;
 import edu.nyu.cs.engine.exception.IllegalQueryParameterException;
 import edu.nyu.cs.engine.index.SearchIndexer;
-import edu.nyu.cs.engine.query.impl.PhraseQuery;
+import edu.nyu.cs.engine.query.impl.WordQuery;
 import edu.nyu.cs.engine.rank.SearchRanker;
 import edu.nyu.cs.engine.rank.utils.SearchRankerFactory;
 
@@ -99,9 +99,7 @@ public final class SearchQueryHandler implements HttpHandler {
         
         SearchRanker searchRanker = 
                 SearchRankerFactory.getSearchRanker(queryParameter.getRankerType(), indexer);
-        // Process the raw search query
-        SearchQuery query = new PhraseQuery(queryParameter.getQuery());
-        query.processQuery();
+        SearchQuery query = new WordQuery(queryParameter.getQuery());
         
         List<ScoredDocument> scoredDocuments = 
                 searchRanker.runQuery(query, queryParameter.getNumberOfResults());
@@ -109,7 +107,7 @@ public final class SearchQueryHandler implements HttpHandler {
             case HTML: response(exchange, getSearchResultsInHTMLFormat(scoredDocuments)); break;
             case TEXT: response(exchange, getSearchResultsInTextFormat(scoredDocuments)); break;
         }
-        LOGGER.info("Complete search query: " +  queryParameter.getQuery());
+        LOGGER.info("Complete search query: " + queryParameter.getQuery());
     }
     
     /**
