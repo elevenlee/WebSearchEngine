@@ -26,8 +26,8 @@ public class ServerOptionTest {
      */
     @Test
     public void testNewInstance() {
-        assertEquals("test-files/data/simple", serverOption.getCorpusPrefix());
-        assertEquals("test-files/data/index", serverOption.getIndexPrefix());
+        assertEquals("test-files/data/simple/corpus.tsv", serverOption.getCorpusPath());
+        assertEquals("test-files/data/index/corpus.idx", serverOption.getIndexPath());
         assertEquals(IndexerType.FULLSCAN, serverOption.getIndexerType());
     }
     
@@ -129,7 +129,7 @@ public class ServerOptionTest {
     @Test
     public void testToString() {
         assertEquals(
-                "ServerOption={corpus_prefix: test-files/data/simple, index_prefix: test-files/data/index, indexer_type: fullscan}",
+                "ServerOption={corpus_path: test-files/data/simple/corpus.tsv, index_path: test-files/data/index/corpus.idx, indexer_type: fullscan}",
                 serverOption.toString());
     }
 

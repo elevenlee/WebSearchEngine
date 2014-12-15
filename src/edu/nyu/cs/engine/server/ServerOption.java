@@ -24,8 +24,8 @@ import edu.nyu.cs.engine.index.utils.IndexerType;
 public class ServerOption {
     private static final Logger LOGGER = Logger.getLogger("edu.nyu.cs.engine.server.ServerOption");
     
-    private final String corpusPrefix;
-    private final String indexPrefix;
+    private final String corpusPath;
+    private final String indexPath;
     private final IndexerType indexerType;
     private volatile int hashCode;
     
@@ -33,32 +33,32 @@ public class ServerOption {
      * Initializes a newly created {@code ServerOption} object so that it records search engine server
      * configuration options which at least includes corpus location, index location as well as indexer type.
      * <p>
-     * @param corpusPrefix the corpus prefix
-     * @param indexPrefix the index prefix
+     * @param corpusPath the corpus path
+     * @param indexPath the index path
      * @param indexerType the indexer type
      */
-    private ServerOption(String corpusPrefix, String indexPrefix, IndexerType indexerType) {
-        this.corpusPrefix = corpusPrefix;
-        this.indexPrefix = indexPrefix;
+    private ServerOption(String corpusPath, String indexPath, IndexerType indexerType) {
+        this.corpusPath = corpusPath;
+        this.indexPath = indexPath;
         this.indexerType = indexerType;
     }
 
     /**
-     * Returns the corpus prefix.
+     * Returns the corpus path.
      * <p>
-     * @return corpus prefix
+     * @return corpus path
      */
-    public String getCorpusPrefix() {
-        return corpusPrefix;
+    public String getCorpusPath() {
+        return corpusPath;
     }
 
     /**
-     * Returns the index prefix.
+     * Returns the index path.
      * <p>
-     * @return index prefix
+     * @return index path
      */
-    public String getIndexPrefix() {
-        return indexPrefix;
+    public String getIndexPath() {
+        return indexPath;
     }
 
     /**
@@ -98,15 +98,15 @@ public class ServerOption {
         }
         reader.close();
         
-        String corpusPrefix = options.get("corpus_prefix");
-        if (corpusPrefix == null) {
+        String corpusPath = options.get("corpus_path");
+        if (corpusPath == null) {
             throw new IllegalSearchEngineConfigurationException(
-                    "corpus_prefix option miss in server configuration file " + optionsFilePath);
+                    "corpus_path option miss in server configuration file " + optionsFilePath);
         }
-        String indexPrefix = options.get("index_prefix");
-        if (indexPrefix == null) {
+        String indexPath = options.get("index_path");
+        if (indexPath == null) {
             throw new IllegalSearchEngineConfigurationException(
-                    "index_prefix option miss in server configuration file " + optionsFilePath);
+                    "index_path option miss in server configuration file " + optionsFilePath);
         }
         String indexerType = options.get("indexer_type");
         if (indexerType == null) {
@@ -114,7 +114,7 @@ public class ServerOption {
                     "indexer_type option miss in server configuration file " + optionsFilePath);
         }
         return new ServerOption(
-                corpusPrefix, indexPrefix, IndexerType.valueOf(indexerType.toUpperCase()));
+                corpusPath, indexPath, IndexerType.valueOf(indexerType.toUpperCase()));
     }
     
     /**
@@ -140,8 +140,8 @@ public class ServerOption {
             return false;
         }
         ServerOption so = (ServerOption) o;
-        return corpusPrefix.equals(so.corpusPrefix)
-                && indexPrefix.equals(so.indexPrefix)
+        return corpusPath.equals(so.corpusPath)
+                && indexPath.equals(so.indexPath)
                 && indexerType == so.indexerType;
     }
     
@@ -156,8 +156,8 @@ public class ServerOption {
         if (result == 0) {
             final int prime = 31;
             result = 17;
-            result = result * prime + corpusPrefix.hashCode();
-            result = result * prime + indexPrefix.hashCode();
+            result = result * prime + corpusPath.hashCode();
+            result = result * prime + indexPath.hashCode();
             result = result * prime + indexerType.hashCode();
             hashCode = result;
         }
@@ -173,8 +173,8 @@ public class ServerOption {
     @Override
     public String toString() {
         return String.format(
-                "ServerOption={corpus_prefix: %s, index_prefix: %s, indexer_type: %s}", 
-                corpusPrefix, indexPrefix, indexerType.name().toLowerCase());
+                "ServerOption={corpus_path: %s, index_path: %s, indexer_type: %s}", 
+                corpusPath, indexPath, indexerType.name().toLowerCase());
     }
     
 }

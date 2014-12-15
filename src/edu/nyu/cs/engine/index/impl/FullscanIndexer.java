@@ -104,11 +104,11 @@ public class FullscanIndexer extends SearchIndexer implements Serializable {
      */
     @Override
     public void construct() throws IOException {
-        final String corpusFile = serverOption.getCorpusPrefix() + "/corpus.tsv";
-        LOGGER.info("Construct search index from " + corpusFile);
+        final String corpusPath = serverOption.getCorpusPath();
+        LOGGER.info("Construct search index from " + corpusPath);
         
         BufferedReader reader = new BufferedReader(
-                new FileReader(corpusFile));
+                new FileReader(corpusPath));
         try {
             String line = null;
             while ((line = reader.readLine()) != null) {
@@ -147,11 +147,11 @@ public class FullscanIndexer extends SearchIndexer implements Serializable {
         LOGGER.info(
                 "Indexed " + Integer.toString(numberOfDocs) + " documents with " + Long.toString(totalTermFrequency) + " terms");
         
-        final String indexFile = serverOption.getIndexPrefix() + "/corpus.idx";
-        LOGGER.info("Save search index to " + indexFile);
+        final String indexPath = serverOption.getIndexPath();
+        LOGGER.info("Save search index to " + indexPath);
         
         ObjectOutputStream writer = new ObjectOutputStream(
-                new FileOutputStream(indexFile));
+                new FileOutputStream(indexPath));
         writer.writeObject(this);
         writer.close();
     }
@@ -202,11 +202,11 @@ public class FullscanIndexer extends SearchIndexer implements Serializable {
      */
     @Override
     public void load() throws IOException, ClassNotFoundException {
-        final String indexFile = serverOption.getIndexPrefix() + "/corpus.idx";
-        LOGGER.info("Load index file from " + indexFile);
+        final String indexPath = serverOption.getIndexPath();
+        LOGGER.info("Load index file from " + indexPath);
         
         ObjectInputStream reader = new ObjectInputStream(
-                new FileInputStream(indexFile));
+                new FileInputStream(indexPath));
         FullscanIndexer indexer = (FullscanIndexer) reader.readObject();
         this.documents = indexer.documents;
         this.numberOfDocs = documents.size();
